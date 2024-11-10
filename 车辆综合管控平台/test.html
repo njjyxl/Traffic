@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <script src="echarts.js"></script> <!-- 引入echarts.js -->
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        <p></p>
+    </div>
+<script>
+    // header('Access-Control-Allow-Origin:*');
+    let h=0
+    let d=0
+    setInterval("getData()",5000) 
+    function getData(){
+        if (d==59&&h==24) {
+                return;}
+        else if(h==24){
+                h=0;
+                d+=1;
+        }
+       axios.get('http://127.0.0.1:5000/get_data',{params: {
+                    hour: h,
+                    day: d
+                }})
+       .then(res=>{
+        var data=res.data
+        console.log(d)
+        console.log(h)
+        console.log(data)
+        console.log(data[0]["avr"][0])
+
+        h+=1
+       })
+       .catch(err=>{
+        console.log(err)
+       })
+    }
+    
+</script>
+</body>
+</html>

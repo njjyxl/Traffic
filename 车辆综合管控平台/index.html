@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>道路数据实时监控</title>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style2.0.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/echart.js"></script>
+    <script>
+        $(function () {
+            $('.myscroll').myScroll({
+                speed: 20, //数值越大，速度越慢
+                rowHeight: 38 //li的高度
+            });
+        })
+
+    </script>
+</head>
+<body>
+<!--头部-->
+<header id="header">
+    <div class="header">
+        <h1 class="">道路数据实时监控</h1>
+    </div>
+</header>
+
+<!--内容-->
+<section id="data_content">
+
+    <div class="data_info">
+        <div class="info_1 fl">
+            <!-- <div class="text_1">
+                <div class="fl">
+                    <img src="images/tianqi.png"  alt="">
+                </div>
+                <div class="fl">
+                    <div class="fl count">
+                        <p>天气情况</p>
+                        <p class="conuts">Snow</p>
+                    </div>
+                </div>
+            </div> -->
+            <div class="info_1 fl">
+                <div class="text_1">
+                    <div class="fl">
+                        <img id="weatherIcon" src="images/default.png" alt="天气图标"> <!-- 初始默认图标 -->
+                    </div>
+                    <div class="fl"> 
+                        <div class="fl count">
+                            <p>天气情况</p>
+                            <p class="conuts">Loading...</p> <!-- 天气信息将动态插入到这里 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="info_2 fl">
+            <div class="text_2">
+                <div class="fl">
+                    <img src="images/星期.png" alt="">
+                    <!-- <div class="fl count">
+                        <p>车辆总数(辆)</p>
+                        <p class="conuts">46625</p>
+                    </div> -->
+                </div>
+                <div class="fl">
+                    <!-- <img src="images/info_5.png" alt=""> -->
+                    <div class="fl count">
+                        <p>is_weekend</p>
+                        <p class="conuts" id="isWeekend">loading...</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="info_3 fr">
+            <div class="text_2">
+                <div class="fl">
+                    <img src="images/节假日2.png" alt="">
+                </div>
+                <div class="fl">
+                    <!-- <img src="images/info_7.png" alt=""> -->
+                    <div class="fl count">
+                        <p>is_holiday</p>
+                        <p class="conuts" id="is_holiday">Loading...</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="data_content">
+        <!--左边-->
+        <div class="data_left fl">
+            <div class="left_top">
+                <div class="top_bottom public">
+                    <div class="min-title">
+                        <span>拥堵情况</span>
+                    </div>
+                    <div id="echarts_1" style="width:100%;height: 100%;"></div>
+                    <div class="boxfoot"></div>
+                </div>
+                <!--左边第三部分-->
+                <div class="left_bottom public">
+                    <div class="min-title">
+                        <span>平均数据</span>
+                    </div>
+                    <div id="chart_2" style="width:100%;height: 100%;"></div>
+                    <div class="boxfoot"></div>
+                </div>
+            </div>
+        </div>
+        <!--中间-->
+        <div class="data_c fl">
+            <div class="data_c_1">
+
+                <div class="min-title">
+                    <span>各路段情况</span>
+                </div>
+                <!-- <div class="echart wenzi">
+                    <div class="gun">
+                        <span>路段名称</span>
+                        <span>车流量</span>
+                        <span>拥堵水平</span>
+                    </div>
+                    <div id="FontScroll" class="myscroll" style="width: 100%;height: 120%;">
+                        <ul>
+                            <li>
+                                <div class="fontInner clearfix">
+                                    <span >253万</span>
+                                    <span>65万</span>
+                                    <span>182万</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="fontInner clearfix">
+                                    <span >253万</span>
+                                    <span>65万</span>
+                                    <span>182万</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="fontInner clearfix">
+                                    <span >253万</span>
+                                    <span>65万</span>
+                                    <span>182万</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="fontInner clearfix">
+                                    <span >253万</span>
+                                    <span>65万</span>
+                                    <span>182万</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="fontInner clearfix">
+                                    <span >253万</span>
+                                    <span>65万</span>
+                                    <span>182万</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="fontInner clearfix">
+                                    <span >253万</span>
+                                    <span>65万</span>
+                                    <span>182万</span>
+                                </div>
+                            </li><li>
+                            <div class="fontInner clearfix">
+                                <span >253万</span>
+                                <span>65万</span>
+                                <span>182万</span>
+                            </div>
+                        </li>
+                            <li>
+                                <div class="fontInner clearfix">
+                                    <span >253万</span>
+                                    <span>65万</span>
+                                    <span>182万</span>
+                                </div>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div> -->
+
+                <div class="echart wenzi">
+                    <div class="gun">
+                        <span>路段名称</span>
+                        <span>车流量</span>
+                        <span>拥堵水平</span>
+                    </div>
+                    <div id="FontScroll" class="myscroll" style="width: 100%; height: 120%; overflow: hidden;">
+                        <ul id="dataList">
+                            
+                        </ul>
+                    </div>
+                </div>
+                
+
+            </div>
+            <div class="data_c_2 public">
+
+                <div id="echart4" style="width: 100%;height: 100%;padding-top: 10px;padding-left: 4px;"></div>
+                <div class="boxfoot"></div>
+            </div>
+        </div>
+        <!--右边-->
+        <div class="data_right fr">
+            <div class="right_top">
+                <!--/*右边第一部分*/-->
+                <!--右边第二部分-->
+                <div class="right_content public">
+                    <div class="min-title">
+                        <span>车流量TOP50</span>
+                    </div>
+                    <div id="chart_3" style="width:100%;height: 100%;"></div>
+                    <div class="boxfoot"></div>
+                </div>
+                <!--右边第三部分-->
+                <div class="right_bottom public">
+                    <div class="min-title">
+                        <span>拥堵水平TOP50</span>
+                    </div>
+                    <div id="echarts_2" style="width:100%;height: 100%;padding-top: 10px;"></div>
+                    <div class="boxfoot"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</section>
+
+<script src="js/script.js"></script>
+<script type="text/javascript" src="js/jquery-1.8.0.min.js"></script>
+<script src="js/echarts.min.js"></script>
+<script src="js/echart.js"></script>
+<!--<script type="text/javascript" src="js/com.js"></script>-->
+<script src="js/index.js"></script>
+<script src="js/fontscroll.js"></script>
+<script>
+     // 页面加载后，每5秒调用echarts_1函数更新图表
+     window.onload = function() {
+        echarts_1(); // 初始调用一次，显示初始数据
+        setInterval(echarts_1, 5000); // 每5秒调用一次
+        
+        echarts_4(); // 初次调用，显示初始数据
+        setInterval(echarts_4, 5000); // 每5秒自动刷新图表数据
+        
+        echart_2(); // 初始调用一次，显示初始数据
+        setInterval(echart_2, 5000); // 每5秒调用一次更新数据
+
+        echart_3(); // 初次调用显示数据
+        setInterval(echart_3, 5000); // 每5秒自动刷新图表数据
+
+        echarts_2(); // 初次调用显示数据
+        setInterval(echarts_2, 5000); // 每5秒刷新一次数据
+    };
+    // 页面加载后，初始化图表并设置每5秒更新一次数据
+    
+</script>
+<script>
+    let data = [];
+    function fetchData() {
+        if (d==59&&h==24) {
+                return;}
+        else if(h==24){
+                h=0;
+                d+=1;
+        }
+    axios.get('http://127.0.0.1:5000/get_data',{params: {
+                    hour: h,
+                    day: d
+                }})
+    .then(res=>{
+        const dataCache=res.data;
+        const weatherData = dataCache[0]["weather"];
+        const weekend = dataCache[0]["weekend"];
+        const isholiday = dataCache[0]["holiday"];
+        // console.log(weatherData);
+        updateWeatherDisplay(weatherData);
+        // console.log(weekend);
+        updateWeekendDisplay(weekend);
+        // console.log(isholiday);
+        updateholidayDisplay(isholiday)
+        data = dataCache[2];
+        console.log(data);
+        renderData();
+        h+=1;
+    })
+        .catch(err => {
+            console.error("数据请求失败：", err);
+        });
+}
+    function updateWeatherDisplay(condition) {
+        const weatherConditionElement = document.querySelector('.conuts');
+        const weatherIconElement = document.getElementById('weatherIcon');
+
+        // 更新天气文本
+        weatherConditionElement.textContent = condition;
+
+        // 根据不同的天气条件选择对应的图标
+        let iconPath = 'images/default.png'; // 默认图标
+        switch (condition) {
+            case 'Sunny':
+                iconPath = 'images/Sunny.png';
+                break;
+            case 'Cloudy':
+                iconPath = 'images/cloudy.png';
+                break;
+            case 'Heavy Rain':
+                iconPath = 'images/heavy-rain.png';
+                break;
+            case 'Light Rain':
+                iconPath = 'images/light-rain.png';
+                break;
+            case 'Smog':
+                iconPath = 'images/smog.png';
+                break;
+            case 'Snow':
+                iconPath = 'images/Snow.png';
+                break;
+            default:
+                console.warn('未知天气条件:', condition);
+        }
+
+        // 更新天气图标
+        weatherIconElement.src = iconPath;
+    }
+
+
+    function updateWeekendDisplay(isWeekend) {
+        const weekendElement = document.getElementById('isWeekend');
+        weekendElement.textContent = isWeekend;
+}
+    function updateholidayDisplay(isholiday) {
+        const holidayElement = document.getElementById('is_holiday');
+        holidayElement.textContent = isholiday;
+}
+// 渲染数据到页面
+function renderData() {
+    const dataList = document.getElementById('dataList');
+    dataList.innerHTML = '';  // 清空之前的内容
+
+    data.forEach(item => {
+        const li = document.createElement('li');
+        const fontInner = document.createElement('div');
+        fontInner.classList.add('fontInner', 'clearfix');
+
+        const roadName = document.createElement('span');
+        roadName.textContent = item.road_name;
+
+        const trafficVolume = document.createElement('span');
+        trafficVolume.textContent = item.traffic_volume;
+
+        const congestionLevel = document.createElement('span');
+        congestionLevel.textContent = item.congestion_level;
+
+        fontInner.appendChild(roadName);
+        fontInner.appendChild(trafficVolume);
+        fontInner.appendChild(congestionLevel);
+        li.appendChild(fontInner);
+        dataList.appendChild(li);
+    });
+
+    // 触发滚动效果
+    triggerScroll();
+}
+
+// 触发滚动效果
+let scrollIntervalId = null; 
+function triggerScroll() {
+    const scrollContainer = document.getElementById('FontScroll');
+    const scrollHeight = scrollContainer.scrollHeight;  // 获取内容的总高度
+    const containerHeight = scrollContainer.clientHeight;  // 获取容器的高度
+
+    // 如果内容高度大于容器高度，就开始滚动
+    if (scrollHeight > containerHeight) {
+        scrollContainer.scrollTop = 0;  // 重置滚动位置
+
+                // 如果已存在滚动定时器，先清除
+                if (scrollIntervalId) {
+            clearInterval(scrollIntervalId);
+        }
+
+        scrollIntervalId=setInterval(() => {
+            // 每隔 2 秒滚动一次
+            scrollContainer.scrollTop += 1;
+            if (scrollContainer.scrollTop >= scrollHeight - containerHeight) {
+                scrollContainer.scrollTop = 0;  // 滚动到底部时返回顶部
+            }
+        }, 20);  // 调整滚动速度
+    }
+}
+    fetchData();  // 初次加载数据
+    setInterval(fetchData, 5000);
+
+
+</script>
+
+</body>
+</html>
